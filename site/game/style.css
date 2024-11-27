@@ -1,0 +1,10 @@
+html, body {
+    height: 100%; /* Ensure the body and html fill the screen */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+#map {
+    height: 100%; /* Make the map fill the entire height */
+    width: 100%; /* Make the map fill the entire width */
+}

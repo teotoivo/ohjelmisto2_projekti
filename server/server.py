@@ -3,14 +3,25 @@ import mysql.connector
 from flask_cors import CORS
 import math
 
+#read from file sql_cred.json
+import json
+with open('sql_cred.json') as f:
+    data = json.load(f)
+    host = data['host']
+    port = data['port']
+    user = data['user']
+    password = data['password']
+    database = data['database']
+
+
 home_airport = 'EFHK'
 
 connection = mysql.connector.connect(
-    host="localhost",
-    port="3306",
-    user="root",
-    password="password",
-    database="flight_game"
+    host=host,
+    port=port,
+    user=user,
+    password=password,
+    database=database
 )
 cursor = connection.cursor(dictionary=True)
 
@@ -19,7 +30,8 @@ CORS(app)
 
 @app.route('/get_start_and_end_airports', methods=['GET'])
 def get_start_and_end_airports():
-    cursor.execute("SELECT * FROM airport ORDER BY RAND() LIMIT 1")
+    # alloved airport types are small_airport medium_airport large_airport
+    cursor.execute("SELECT * FROM airport WHERE type IN ('small_airport', 'medium_airport', 'large_airport') ORDER BY RAND() LIMIT 1;")
     end_airport = cursor.fetchone()
     return {
         'start_airport': home_airport,
@@ -29,9 +41,62 @@ def get_start_and_end_airports():
 @app.route("/does_game_exist", methods=['POST'])
 def does_game_exist():
     data = request.json
+
+    cursor.execute("SELECT * FROM game_data WHERE player_name = %s", (data['name'],))
+    game = cursor.fetchone()
+
     return {
-        'game_exists': data
+        "exists": game is not None
     }
+
+@app.route("/create_new_game", methods=['POST'])
+def create_new_game():
+    data = request.json
+
+    cursor.execute("INSERT INTO game_data (player_name, home_airport_ident, current_airport_ident, destination_airport_ident, total_distance, co2_consumed) VALUES (%s, %s, %s, %s, %s, %s)", (
+        data['name'],
+        data["start_airport"],
+        data["start_airport"],
+        data["end_airport"],
+        0,
+        0
+    ))
+    connection.commit()
+
+    return {
+        "success": True
+    }
+
+@app.route("/get_all_small_airports", methods=['GET'])
+def get_all_small_airports():
+    cursor.execute("SELECT * FROM airport WHERE type = 'small_airport'")
+    airports = cursor.fetchall()
+    return {
+        "airports": airports
+    }
+
+@app.route("/get_all_medium_airports", methods=['GET'])
+def get_all_medium_airports():
+    cursor.execute("SELECT * FROM airport WHERE type = 'medium_airport'")
+    airports = cursor.fetchall()
+    return {
+        "airports": airports
+    }
+
+@app.route("/get_all_large_airports", methods=['GET'])
+def get_all_large_airports():
+    cursor.execute("SELECT * FROM airport WHERE type = 'large_airport'")
+    airports = cursor.fetchall()
+    return {
+        "airports": airports
+    }
+
+@app.route("/get_game_data", methods=['POST'])
+def get_game_data():
+    data = request.json
+
+
+
 
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
