@@ -6,6 +6,26 @@ if (name) {
     main()
 }
 
+
+/**
+ *
+ * @param ident
+ * @returns {Promise<{
+ *
+ * }>}
+ */
+async function getAirport(ident) {
+    const response = await fetch(api + "get_airport", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ident: ident})
+    });
+
+    return await response.json();
+}
+
 async function main() {
     let map = L.map('map').setView([0, 0], 3);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -14,7 +34,28 @@ async function main() {
     }).addTo(map);
 
 
+    const response = await fetch(api + "get_game_data", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name})
+    });
 
+    /**
+     * @type {{
+     * co2_consumed: number,
+     * current_airport_ident: string,
+     * destination_airport_ident: string,
+     * home_airport_ident: string,
+     * player_name: string,
+     * total_distance: string
+     * }}
+     */
+    let game_data = await response.json();
+
+
+    console.log(getAirport(game_data.current_airport_ident));
 
 
     const s_response = await fetch(api + "get_all_small_airports");
@@ -80,4 +121,5 @@ async function main() {
 
     map.on('zoomend', checkMediumMarkers);
     map.on('dragend', checkMediumMarkers);
+
 }

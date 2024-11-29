@@ -1,17 +1,20 @@
 from flask import Flask, request
 import mysql.connector
 from flask_cors import CORS
-import math
 
-#read from file sql_cred.json
+#read from file sql_cred.json and i file doesnt exist throw a custom error
 import json
-with open('sql_cred.json') as f:
-    data = json.load(f)
-    host = data['host']
-    port = data['port']
-    user = data['user']
-    password = data['password']
-    database = data['database']
+try:
+    with open('sql_cred.json') as f:
+        data = json.load(f)
+        host = data['host']
+        port = data['port']
+        user = data['user']
+        password = data['password']
+        database = data['database']
+except FileNotFoundError:
+    raise FileNotFoundError("sql_cred.json not found")
+
 
 
 home_airport = 'EFHK'
@@ -93,7 +96,17 @@ def get_all_large_airports():
 
 @app.route("/get_game_data", methods=['POST'])
 def get_game_data():
-    data = request.json
+    name = request.json['name']
+    cursor.execute("SELECT * FROM game_data WHERE player_name = %s", (name,))
+    game = cursor.fetchone()
+    return game
+
+@app.route("/get_airport", methods=['POST'])
+def get_airport():
+    ident = request.json['ident']
+    cursor.execute("SELECT * FROM airport WHERE ident = %s", (ident,))
+    airport = cursor.fetchone()
+    return airport
 
 
 
