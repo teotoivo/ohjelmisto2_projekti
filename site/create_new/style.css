@@ -85,6 +85,10 @@ body div button, body div p {
 	border: none;
 }
 
+body div button {
+	cursor: pointer;
+}
+
 body div .error {
 	background-color: red;
 }
