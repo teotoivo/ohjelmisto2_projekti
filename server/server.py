@@ -109,6 +109,20 @@ def get_airport():
     return airport
 
 
+@app.route("/save_game_data", methods=['POST'])
+def save_game_data():
+    data = request.json
+
+    cursor.execute("UPDATE game_data SET current_airport_ident = %s, total_distance = %s, co2_consumed = %s WHERE player_name = %s", (
+        data['current_airport_ident'],
+        data['total_distance'],
+        data['co2_consumed'],
+        data['player_name']
+    ))
+    connection.commit()
+    return {
+        "success": True
+    }
 
 
 if __name__ == '__main__':

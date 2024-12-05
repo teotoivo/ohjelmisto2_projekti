@@ -8,3 +8,26 @@ html, body {
     height: 100%; /* Make the map fill the entire height */
     width: 100%; /* Make the map fill the entire width */
 }
+
+.fuel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+
+    padding: 10px 35px;
+	border-radius: 10px;
+	background-color: #f0f0f0;
+    border: none;
+}
+#data {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10000;
+
+    padding: 10px 35px;
+	border-radius: 10px;
+	background-color: #f0f0f0;
+    border: none;
+}
