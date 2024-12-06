@@ -1,7 +1,7 @@
 api = "http://127.0.0.1:3000/"
 const urlParams = new URLSearchParams(window.location.search);
 const name = urlParams.get('name');
-
+console.log(name)
 
 function changeCurrentAirportTrigger(ident) {
     let trigger = document.querySelector("#trigger");
@@ -183,7 +183,7 @@ async function main() {
 
         if (new_airport === game_data.destination_airport_ident) {
             const basePath = window.location.pathname.split('/').slice(0, -2).join('/'); // Remove "create_new/index.html"
-            window.location.href = `${basePath}/win?co2=${game_data.co2_consumed}&distance=${game_data.total_distance}&name=${name}`;
+            window.location.href = `${basePath}/win/index.html?co2=${game_data.co2_consumed}&distance=${game_data.total_distance}&name=${name}`;
         }
 
         await saveGameData()

@@ -1,4 +1,4 @@
-api = "http://127.0.0.1:3000/"
+const api = "http://127.0.0.1:3000/"
 
 let start_airport = "";
 let end_airport = "";

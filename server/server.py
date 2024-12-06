@@ -124,6 +124,14 @@ def save_game_data():
         "success": True
     }
 
+@app.route("/get_all_users", methods=['GET'])
+def get_all_users():
+    cursor.execute("SELECT * FROM game_data")
+    users = cursor.fetchall()
+    return {
+        "users": users
+    }
+
 
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=3000)
