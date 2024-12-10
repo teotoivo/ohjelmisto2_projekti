@@ -1,0 +1,27 @@
+body {
+    background-image: url("../img/plane.jpg");
+	width: 100%;
+	height: 100dvh;
+	background-size: cover;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    overflow: hidden;
+}
+
+div {
+	display: flex;
+    flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 20px 100px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	gap: 15px;
+
+}
+
+div p {
+    font-size: 20px;
+}
